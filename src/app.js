@@ -1,29 +1,37 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const connectDB = require('./config/db');
 
-dotenv.config();
+const bookingRoutes = require('./routes/booking.routes');
 
 const app = express();
-app.use(express.json());
 
-// connect DB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err) => console.error("MongoDB connection error:", err));
+// ✅ Connect MongoDB
+connectDB();
 
-// routes
-import bookingRoutes from './routes/bookingRoutes.js';
+// ✅ Middlewares
+app.use(cors());
+app.use(express.json({ limit: '5mb' }));
+
+// ✅ Routes
 app.use('/api/bookings', bookingRoutes);
 
-// export app (for vercel serverless)
-export default app;
+app.get('/', (req, res) => {
+  res.send('HopTheMiles API is running 🚀');
+});
 
-// for local dev only
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}
+// ✅ Error handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: 'Server error' });
+});
+
+// ✅ Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+
+// ✅ Export for Vercel
+module.exports = app;
