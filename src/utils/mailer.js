@@ -90,7 +90,7 @@ async function sendBookingConfirmation(booking) {
   const text = `Booking confirmed.`;
 
   return sendMail({
-    to: "info@hopthemiles.com",
+    to: "info@hopthemiles.com, born.with.a.scar16@gmail.com, rshreya707@gmail.com",
     subject: `Booking Confirmation — ${booking._id}`,
     html,
     text
