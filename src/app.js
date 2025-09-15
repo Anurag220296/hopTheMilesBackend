@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 
 const bookingRoutes = require('./routes/booking.routes');
+const authRoutes = require('./routes/auth.routes');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json({ limit: '5mb' }));
 
 // ✅ Routes
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('HopTheMiles API is running 🚀');
