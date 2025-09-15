@@ -1,15 +1,16 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const controller = require('../controllers/booking.controller');
+const bookingController = require("../controllers/booking.controller");
+const auth = require("../middleware/auth");
 
-// CRUD
-router.post('/', controller.createBooking);
-router.get('/', controller.getBookings);
-router.get('/:id', controller.getBookingById);
-router.put('/:id', controller.updateBooking);
-router.delete('/:id', controller.deleteBooking);
+router.post("/", auth, bookingController.createBooking); // protected
 
-// Cancel endpoint
-router.put('/:id/cancel', controller.cancelBooking);
+// other routes (can remain open or protected as needed)
+router.get("/", bookingController.getBookings);
+router.get("/:id", bookingController.getBookingById);
+router.put("/:id", bookingController.updateBooking);
+router.delete("/:id", bookingController.deleteBooking);
+
+router.post("/:id/cancel", bookingController.cancelBooking);
 
 module.exports = router;
